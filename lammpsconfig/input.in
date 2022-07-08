@@ -1,0 +1,12 @@
+#OUTPUT FePd
+#STRUCTURE c-fcc
+#A0 3.42215
+#BX 1,0,0
+#BY 0,1,0
+#BZ 0,0,1
+#COPIES 16,16,16
+#LABELS 1,2
+#DIST mixed,95,5
+#X 0.0,1.0
+#Y 0.0,1.0
+#Z 0.0,1.0
