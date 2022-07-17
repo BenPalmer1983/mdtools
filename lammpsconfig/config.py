@@ -23,6 +23,7 @@ class config:
   'x': numpy.asarray([0.0, 1.0], dtype=numpy.float64),
   'y': numpy.asarray([0.0, 1.0], dtype=numpy.float64),
   'z': numpy.asarray([0.0, 1.0], dtype=numpy.float64),  
+  'offset': numpy.zeros((3,), dtype=numpy.float64,),
   # CALCULATED
   'uv': numpy.zeros((3,3,), dtype=numpy.float64,),
   'copies_mult': numpy.zeros((3,3,), dtype=numpy.float64,),
@@ -96,7 +97,7 @@ class config:
         config.d['uv_in'][2,:] = f[0:3]
       elif("#COPIES" in line.upper()):
         f = line.split(" ")
-        f = numpy.asarray(f[1].split(","), dtype=numpy.float64)
+        f = numpy.asarray(f[1].split(","), dtype=numpy.int32)
         config.d['copies'][:] = f[0:3]
       elif("#LABELS" in line.upper()):
         f = line.split(" ")
@@ -113,6 +114,10 @@ class config:
       elif("#Z" in line.upper()):
         f = line.split(" ")
         config.d['z'] = numpy.asarray(f[1].split(","), dtype=numpy.float64)
+      elif("#OFFSET" in line.upper()):
+        f = line.split(" ")
+        f = numpy.asarray(f[1].split(","), dtype=numpy.float64)
+        config.d['offset'][:] = f[0:3]
 
 
     fh.close()
@@ -185,7 +190,7 @@ class config:
     print("Make coords (real)")
     config.d['coords_real'] = numpy.copy(config.d['coords'])
     for n in range(config.d['count']):
-      config.d['coords_real'][n,:] = numpy.matmul(config.d['box'], config.d['coords'][n,:])
+      config.d['coords_real'][n,:] = config.d['offset'][:] + numpy.matmul(config.d['box'], config.d['coords'][n,:])
 
 
   def make_lammps_file():
@@ -199,9 +204,9 @@ class config:
     fh.write(str(config.d['count']) + " atoms\n")
     fh.write(str(len(config.d['labels'])) + " atom types\n")
     fh.write("\n")
-    fh.write("{0:.7f}".format(0.0) + "   " + "{0:.7f}".format(config.d['box'][0,0]) + "  xlo xhi \n")
-    fh.write("{0:.7f}".format(0.0) + "   " + "{0:.7f}".format(config.d['box'][1,1]) + "  ylo yhi \n")
-    fh.write("{0:.7f}".format(0.0) + "   " + "{0:.7f}".format(config.d['box'][2,2]) + "  zlo zhi \n")
+    fh.write("{0:.7f}".format(0.0) + "   " + "{0:.7f}".format(config.d['box'][0,0] + 2 * config.d['offset'][0]) + "  xlo xhi \n")
+    fh.write("{0:.7f}".format(0.0) + "   " + "{0:.7f}".format(config.d['box'][1,1] + 2 * config.d['offset'][1]) +  "  ylo yhi \n")
+    fh.write("{0:.7f}".format(0.0) + "   " + "{0:.7f}".format(config.d['box'][2,2] + 2 * config.d['offset'][2]) + "  zlo zhi \n")
     fh.write("\n")
     fh.write("Atoms\n")
     fh.write("\n")

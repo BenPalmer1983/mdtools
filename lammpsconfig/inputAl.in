@@ -1,0 +1,12 @@
+#OUTPUT al
+#STRUCTURE c-fcc
+#A0 4.04
+#BX 1,0,0
+#BY 0,1,0
+#BZ 0,0,1
+#COPIES 16,16,16
+#LABELS 1
+#DIST mixed,100
+#X 0.0,1.0
+#Y 0.0,1.0
+#Z 0.0,1.0

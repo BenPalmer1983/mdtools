@@ -5,8 +5,8 @@
 #BY 0,1,0
 #BZ 0,0,1
 #COPIES 10,10,10
-#LABELS Fe,Pd
-#DIST mixed,0,100
+#LABELS 1,2
+#DIST ORDERED
 #X 0.0,1.0
 #Y 0.0,1.0
 #Z 0.0,1.0
